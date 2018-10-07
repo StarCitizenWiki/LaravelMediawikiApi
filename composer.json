@@ -1,0 +1,32 @@
+{
+    "name": "starcitizenwiki/mediawikiapi",
+    "description": "Laravel Package to interact with a Mediawiki Installation through the API, authenticated via OAuth",
+    "type": "library",
+    "require": {
+        "php": "^7.2",
+        "mediawiki/oauthclient": "^0.1.2",
+        "starcitizenwiki/socialite-provider": "^1.0",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "authors": [
+        {
+            "name": "Hannes",
+            "email": "hannes@octofox.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "StarCitizenWiki\\Api\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "StarCitizenWiki\\MediawikiApi\\ApiServiceProvider"
+            ],
+            "aliases": {
+                "MediaWiki": "StarCitizenWiki\\MediawikiApi\\ApiServiceProvider"
+            }
+        }
+    }
+}
