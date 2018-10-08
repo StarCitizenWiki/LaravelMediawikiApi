@@ -8,11 +8,11 @@
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
+use MediaWiki\OAuthClient\Exception;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
+use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
-use StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException;
 
 /**
  * Create and Send a Request to a MediaWiki Api
@@ -20,7 +20,6 @@ use StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException;
 class MediaWikiRequestFactory
 {
     const MEDIAWIKI_API_URL = 'mediawiki.api_url';
-    const MEDIA_WIKI_API_ERROR = 'MediaWiki-API-Error';
 
     /**
      * @var \StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract
@@ -38,49 +37,51 @@ class MediaWikiRequestFactory
     }
 
     /**
-     * @return \GuzzleHttp\Psr7\Response
+     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MediaWiki\OAuthClient\Exception
-     * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
      */
-    public function getResponse(): Response
+    public function getResponse(): MediaWikiResponse
     {
         $client = $this->makeClient();
 
-        if ($this->apiRequest->requestMethod() === 'POST') {
-            $response = $client->request(
-                $this->apiRequest->requestMethod(),
-                config(self::MEDIAWIKI_API_URL),
-                $this->getRequestOptions()
-            );
-        } else {
-            $response = $client->request(
-                $this->apiRequest->requestMethod(),
-                sprintf('%s?%s', config(self::MEDIAWIKI_API_URL), http_build_query($this->apiRequest->queryParams())),
-                $this->getRequestOptions()
-            );
+        $response = $client->request(
+            $this->apiRequest->requestMethod(),
+            $this->makeRequestUrl(),
+            $this->getRequestOptions()
+        );
+
+        return MediaWikiResponse::fromGuzzleResponse($response);
+    }
+
+    /**
+     * Create the Request URL
+     *
+     * @return string
+     */
+    private function makeRequestUrl(): string
+    {
+        $url = config(self::MEDIAWIKI_API_URL);
+
+        if (strtoupper($this->apiRequest->requestMethod()) === 'GET') {
+            return sprintf('%s?%s', $url, http_build_query($this->apiRequest->queryParams()));
         }
 
-        if ($response->hasHeader(self::MEDIA_WIKI_API_ERROR)) {
-            $errors = implode(', ', $response->getHeader(self::MEDIA_WIKI_API_ERROR));
-
-            throw new ApiErrorException("Api Error: {$errors}");
-        }
-
-        return $response;
+        return (string) $url;
     }
 
     /**
      * @return \GuzzleHttp\Client
-     *
-     * @throws \MediaWiki\OAuthClient\Exception
      */
     private function makeClient(): Client
     {
         $mediaWikiRequest = $this->makeMediawikiRequestObject();
 
-        $header = $mediaWikiRequest->toHeader();
+        try {
+            $header = $mediaWikiRequest->toHeader();
+        } catch (Exception $e) {
+            $header = 'Authorization: OAuth';
+        }
         $header = explode(':', $header);
 
         return new Client(
