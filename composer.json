@@ -16,16 +16,16 @@
     ],
     "autoload": {
         "psr-4": {
-            "StarCitizenWiki\\Api\\": "src/"
+            "StarCitizenWiki\\MediaWikiApi\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "StarCitizenWiki\\MediawikiApi\\ApiServiceProvider"
+                "StarCitizenWiki\\MediaWikiApi\\ApiServiceProvider"
             ],
             "aliases": {
-                "MediaWiki": "StarCitizenWiki\\MediawikiApi\\ApiServiceProvider"
+                "MediaWikiApi": "StarCitizenWiki\\MediawikiApi\\Facades\\MediaWikiApi"
             }
         }
     }

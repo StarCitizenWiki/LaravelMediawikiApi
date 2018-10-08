@@ -5,7 +5,7 @@
  * Time: 17:36
  */
 
-namespace StarCitizenWiki\MediawikiApi\Api;
+namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -70,6 +70,8 @@ class ApiManager
 
     /**
      * Creates the Consumer Object
+     *
+     * @return \MediaWiki\OAuthClient\Consumer
      *
      * @throws \InvalidArgumentException
      */

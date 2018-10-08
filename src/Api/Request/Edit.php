@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace StarCitizenWiki\MediawikiApi\Api\Request;
+namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
 use GuzzleHttp\Psr7\Response;
-use StarCitizenWiki\MediawikiApi\Api\ApiRequestFactory;
-use StarCitizenWiki\MediawikiApi\Contracts\ApiRequestContract;
+use StarCitizenWiki\MediaWikiApi\Api\MediaWikiApi;
+use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
 
 /**
  * User: Hannes
@@ -13,21 +13,37 @@ use StarCitizenWiki\MediawikiApi\Contracts\ApiRequestContract;
  */
 class Edit extends AbstractBaseRequest implements ApiRequestContract
 {
+    /**
+     * Edit constructor.
+     */
     public function __construct()
     {
         $this->params['action'] = 'edit';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function requestMethod(): string
     {
         return 'POST';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function needsAuthentication(): bool
     {
         return true;
     }
 
+    /**
+     * The Page title to Edit
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
     public function title(string $title)
     {
         unset($this->params['pageid']);
@@ -36,6 +52,13 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * The Page ID to Edit
+     *
+     * @param int $id
+     *
+     * @return $this
+     */
     public function pageId(int $id)
     {
         unset($this->params['title']);
@@ -44,6 +67,13 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Set the Page Content
+     *
+     * @param string $text
+     *
+     * @return $this
+     */
     public function text(string $text)
     {
         $this->params['text'] = $text;
@@ -52,6 +82,13 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Create a new Section or edit an existing one
+     *
+     * @param int|null $id
+     *
+     * @return $this
+     */
     public function section(?int $id = null)
     {
         $this->params['section'] = $id;
@@ -62,6 +99,13 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * The Section Title for a new Section
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
     public function sectionTitle(string $title)
     {
         $this->params['sectiontitle'] = $title;
@@ -69,6 +113,13 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Set an Edit Summary
+     *
+     * @param string $summary
+     *
+     * @return $this
+     */
     public function summary(string $summary)
     {
         $this->params['summary'] = $summary;
@@ -76,6 +127,11 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Only create Pages, don't edit them
+     *
+     * @return $this
+     */
     public function createOnly()
     {
         $this->params['createonly'] = true;
@@ -83,6 +139,11 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Mark Edit as Minor
+     *
+     * @return $this
+     */
     public function minor()
     {
         unset($this->params['notminor']);
@@ -91,6 +152,11 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Mark Edit as not Minor
+     *
+     * @return $this
+     */
     public function notMinor()
     {
         unset($this->params['minor']);
@@ -99,9 +165,16 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * @return \GuzzleHttp\Psr7\Response
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MediaWiki\OAuthClient\Exception
+     * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
+     */
     public function request(): Response
     {
-        $response = app(ApiRequestFactory::class)->make('query')->withTimestamp()->meta('tokens')->request();
+        $response = app(MediaWikiApi::class)->make('query')->withTimestamp()->meta('tokens')->request();
         $body = $response->getBody()->getContents();
         $body = json_decode($body, true);
 

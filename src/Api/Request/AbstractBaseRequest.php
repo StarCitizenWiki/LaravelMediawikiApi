@@ -5,23 +5,33 @@
  * Time: 20:18
  */
 
-namespace StarCitizenWiki\MediawikiApi\Api\Request;
+namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
 use GuzzleHttp\Psr7\Response;
-use StarCitizenWiki\MediawikiApi\Api\MediawikiRequestFactory;
-use StarCitizenWiki\MediawikiApi\Contracts\ApiRequestContract;
+use StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory;
 
-abstract class AbstractBaseRequest implements ApiRequestContract
+/**
+ * Base API Request
+ */
+abstract class AbstractBaseRequest
 {
     protected $params = [
         'format' => 'json',
     ];
 
+    /**
+     * {@inheritdoc}
+     */
     public function queryParams(): array
     {
         return $this->params;
     }
 
+    /**
+     * Set format zo json
+     *
+     * @return $this
+     */
     public function json()
     {
         $this->params['format'] = 'json';
@@ -29,6 +39,11 @@ abstract class AbstractBaseRequest implements ApiRequestContract
         return $this;
     }
 
+    /**
+     * Include current Timestamp
+     *
+     * @return $this
+     */
     public function withTimestamp()
     {
         $this->params['curtimestamp'] = 1;
@@ -41,16 +56,22 @@ abstract class AbstractBaseRequest implements ApiRequestContract
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \MediaWiki\OAuthClient\Exception
-     * @throws \StarCitizenWiki\MediawikiApi\Exceptions\ApiErrorException
+     * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
      */
     public function request(): Response
     {
-        /** @var \StarCitizenWiki\MediawikiApi\Api\MediawikiRequestFactory $factory */
-        $factory = app()->makeWith(MediawikiRequestFactory::class, ['apiRequest' => $this]);
+        /** @var \StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory $factory */
+        $factory = app()->makeWith(MediaWikiRequestFactory::class, ['apiRequest' => $this]);
 
         return $factory->getResponse();
     }
 
+    /**
+     * Set or append a Api Query Parameter
+     *
+     * @param string $key
+     * @param string $value
+     */
     protected function setParam(string $key, string $value)
     {
         if (isset($this->params[$key])) {

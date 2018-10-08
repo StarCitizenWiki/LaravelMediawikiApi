@@ -5,24 +5,33 @@
  * Time: 17:38
  */
 
-namespace StarCitizenWiki\MediawikiApi\Api;
+namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
-use StarCitizenWiki\MediawikiApi\Contracts\ApiRequestContract;
-use StarCitizenWiki\MediawikiApi\Exceptions\ApiErrorException;
+use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
+use StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException;
 
-class MediawikiRequestFactory
+/**
+ * Create and Send a Request to a MediaWiki Api
+ */
+class MediaWikiRequestFactory
 {
     const MEDIAWIKI_API_URL = 'mediawiki.api_url';
     const MEDIA_WIKI_API_ERROR = 'MediaWiki-API-Error';
+
     /**
-     * @var \StarCitizenWiki\MediawikiApi\Contracts\ApiRequestContract
+     * @var \StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract
      */
     private $apiRequest;
 
+    /**
+     * MediaWikiRequestFactory constructor.
+     *
+     * @param \StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract $apiRequest
+     */
     public function __construct(ApiRequestContract $apiRequest)
     {
         $this->apiRequest = $apiRequest;
@@ -33,7 +42,7 @@ class MediawikiRequestFactory
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \MediaWiki\OAuthClient\Exception
-     * @throws \StarCitizenWiki\MediawikiApi\Exceptions\ApiErrorException
+     * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
      */
     public function getResponse(): Response
     {

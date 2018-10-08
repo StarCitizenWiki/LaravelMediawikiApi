@@ -1,12 +1,15 @@
-<?php
+<?php declare(strict_types = 1);
 
-namespace StarCitizenWiki\MediawikiApi;
+namespace StarCitizenWiki\MediaWikiApi;
 
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
-use StarCitizenWiki\MediawikiApi\Api\ApiManager;
-use StarCitizenWiki\MediawikiApi\Api\ApiRequestFactory;
+use StarCitizenWiki\MediaWikiApi\Api\ApiManager;
+use StarCitizenWiki\MediaWikiApi\Api\MediaWikiApi;
 
+/**
+ * Service Provider
+ */
 class ApiServiceProvider extends ServiceProvider
 {
     /**
@@ -30,7 +33,7 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('mediawikiapi', ApiRequestFactory::class);
+        $this->app->bind('mediawikiapi', MediaWikiApi::class);
         $this->app->singleton('mediawikiapi.manager', ApiManager::class);
     }
 

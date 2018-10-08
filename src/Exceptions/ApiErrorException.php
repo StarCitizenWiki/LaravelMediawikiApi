@@ -5,10 +5,11 @@
  * Time: 16:46
  */
 
-namespace StarCitizenWiki\MediawikiApi\Exceptions;
+namespace StarCitizenWiki\MediaWikiApi\Exceptions;
 
+use Exception;
 
-class ApiErrorException extends \Exception
+class ApiErrorException extends Exception
 {
 
 }
