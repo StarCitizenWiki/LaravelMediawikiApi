@@ -7,8 +7,8 @@
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
-use GuzzleHttp\Psr7\Response;
 use StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory;
+use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 
 /**
  * Base API Request
@@ -52,13 +52,11 @@ abstract class AbstractBaseRequest
     }
 
     /**
-     * @return \GuzzleHttp\Psr7\Response
+     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MediaWiki\OAuthClient\Exception
-     * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
      */
-    public function request(): Response
+    public function request(): MediaWikiResponse
     {
         /** @var \StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory $factory */
         $factory = app()->makeWith(MediaWikiRequestFactory::class, ['apiRequest' => $this]);

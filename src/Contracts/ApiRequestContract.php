@@ -7,7 +7,7 @@
 
 namespace StarCitizenWiki\MediaWikiApi\Contracts;
 
-use GuzzleHttp\Psr7\Response;
+use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 
 /**
  * Interface ApiRequestContract
@@ -38,7 +38,7 @@ interface ApiRequestContract
     /**
      * Send the Request
      *
-     * @return \GuzzleHttp\Psr7\Response
+     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
      */
-    public function request(): Response;
+    public function request(): MediaWikiResponse;
 }

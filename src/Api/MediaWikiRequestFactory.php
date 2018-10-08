@@ -19,7 +19,7 @@ use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
  */
 class MediaWikiRequestFactory
 {
-    const MEDIAWIKI_API_URL = 'mediawiki.api_url';
+    private const MEDIAWIKI_API_URL = 'mediawiki.api_url';
 
     /**
      * @var \StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract
@@ -64,7 +64,7 @@ class MediaWikiRequestFactory
         $url = config(self::MEDIAWIKI_API_URL);
 
         if (strtoupper($this->apiRequest->requestMethod()) === 'GET') {
-            return sprintf('%s?%s', $url, http_build_query($this->apiRequest->queryParams()));
+            $url = sprintf('%s?%s', $url, http_build_query($this->apiRequest->queryParams()));
         }
 
         return (string) $url;

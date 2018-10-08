@@ -16,7 +16,7 @@ use function GuzzleHttp\json_decode;
  */
 class MediaWikiResponse
 {
-    const MEDIA_WIKI_API_ERROR = 'MediaWiki-API-Error';
+    private const MEDIA_WIKI_API_ERROR = 'MediaWiki-API-Error';
 
     /**
      * @var \GuzzleHttp\Psr7\Response
@@ -148,7 +148,7 @@ class MediaWikiResponse
      */
     private function setBody(): void
     {
-        if (str_contains($this->headers['content-type'] ?? '', 'application/json')) {
+        if (str_contains($this->headers['Content-Type'][0] ?? '', 'application/json')) {
             try {
                 $this->body = json_decode($this->rawBody, true);
             } catch (\InvalidArgumentException $e) {
