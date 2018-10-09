@@ -53,8 +53,6 @@ abstract class AbstractBaseRequest
 
     /**
      * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request(): MediaWikiResponse
     {
