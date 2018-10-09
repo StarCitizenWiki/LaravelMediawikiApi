@@ -25,7 +25,7 @@
                 "StarCitizenWiki\\MediaWikiApi\\ApiServiceProvider"
             ],
             "aliases": {
-                "MediaWikiApi": "StarCitizenWiki\\MediawikiApi\\Facades\\MediaWikiApi"
+                "MediaWikiApi": "StarCitizenWiki\\MediaWikiApi\\Facades\\MediaWikiApi"
             }
         }
     }
