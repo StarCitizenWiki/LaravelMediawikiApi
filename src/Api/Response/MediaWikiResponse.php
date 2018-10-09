@@ -9,6 +9,7 @@
 namespace StarCitizenWiki\MediaWikiApi\Api\Response;
 
 use GuzzleHttp\Psr7\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use function GuzzleHttp\json_decode;
 
 /**
@@ -59,6 +60,7 @@ class MediaWikiResponse
         $this->headers = $headers;
         $this->rawResponse = $response;
 
+        $this->checkResponse();
         $this->setBody();
     }
 
@@ -72,6 +74,16 @@ class MediaWikiResponse
     public static function fromGuzzleResponse(Response $response)
     {
         return new self((string) $response->getBody(), $response->getStatusCode(), $response->getHeaders(), $response);
+    }
+
+    /**
+     * Check if the Response was successful
+     *
+     * @return bool
+     */
+    public function successful(): bool
+    {
+        return !$this->hasErrors() && !$this->hasWarnings() && $this->status === 200;
     }
 
     /**
@@ -143,6 +155,14 @@ class MediaWikiResponse
     }
 
     /**
+     * @return array
+     */
+    public function getBody(): array
+    {
+        return $this->body ?? [];
+    }
+
+    /**
      * Parses the Response Body
      * Sets an Error if content type is json, but the content can't be decoded
      */
@@ -152,13 +172,41 @@ class MediaWikiResponse
             try {
                 $this->body = json_decode($this->rawBody, true);
             } catch (\InvalidArgumentException $e) {
-                $this->body = [
-                    'error' => [
-                        'code' => 'invalidbody',
-                        'info' => $e->getMessage(),
-                    ],
-                ];
+                $this->setError('invalidbody', $e->getMessage());
             }
+        }
+    }
+
+    /**
+     * Checks if the Guzzle Response was successful
+     */
+    private function checkResponse(): void
+    {
+        if (null !== $this->rawResponse && $this->rawResponse->getStatusCode() !== 200) {
+            $this->setError(
+                HttpResponse::$statusTexts[$this->rawResponse->getStatusCode()] ?? 'undefined',
+                $this->rawBody
+            );
+        }
+    }
+
+    /**
+     * Adds an Error to the Error array
+     *
+     * @param string $code
+     * @param string $message
+     */
+    private function setError(string $code, string $message)
+    {
+        $error = [
+            'code' => $code,
+            'info' => $message,
+        ];
+
+        if (isset($this->body['error'])) {
+            $this->body['error'][] = $error;
+        } else {
+            $this->body['error'] = $error;
         }
     }
 }
