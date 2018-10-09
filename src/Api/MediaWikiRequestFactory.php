@@ -8,6 +8,8 @@
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Response;
 use MediaWiki\OAuthClient\Exception;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
@@ -38,18 +40,33 @@ class MediaWikiRequestFactory
 
     /**
      * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getResponse(): MediaWikiResponse
     {
         $client = $this->makeClient();
 
-        $response = $client->request(
-            $this->apiRequest->requestMethod(),
-            $this->makeRequestUrl(),
-            $this->getRequestOptions()
-        );
+        try {
+            $response = $client->request(
+                $this->apiRequest->requestMethod(),
+                $this->makeRequestUrl(),
+                $this->getRequestOptions()
+            );
+        } catch (RequestException $e) {
+            if (!$e->hasResponse()) {
+                $response = new Response(
+                    503,
+                    [],
+                    sprintf(
+                        "Request URI: %s\nRequest Body: %s\nRequest Method: %s",
+                        $e->getRequest()->getUri(),
+                        (string) $e->getRequest()->getBody() ?: 'empty',
+                        $e->getRequest()->getMethod()
+                    )
+                );
+            } else {
+                $response = $e->getResponse();
+            }
+        }
 
         return MediaWikiResponse::fromGuzzleResponse($response);
     }
@@ -86,6 +103,8 @@ class MediaWikiRequestFactory
 
         return new Client(
             [
+                'timeout' => 1.0,
+                'http_errors' => false,
                 'headers' => [
                     $header[0] => $header[1],
                 ],
