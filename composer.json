@@ -8,6 +8,10 @@
         "starcitizenwiki/socialite-provider": "^1.0",
         "guzzlehttp/guzzle": "^6.3"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "mockery/mockery": "~1.0"
+    },
     "authors": [
         {
             "name": "Hannes",
@@ -17,6 +21,11 @@
     "autoload": {
         "psr-4": {
             "StarCitizenWiki\\MediaWikiApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "StarCitizenWiki\\MediaWikiApi\\Tests\\": "tests/"
         }
     },
     "extra": {

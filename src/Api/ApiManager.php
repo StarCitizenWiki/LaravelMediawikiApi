@@ -15,7 +15,7 @@ use MediaWiki\OAuthClient\Consumer;
 use MediaWiki\OAuthClient\Token;
 
 /**
- * Class AbstractBaseApi
+ * Class Api Manager
  */
 class ApiManager
 {
@@ -28,13 +28,6 @@ class ApiManager
      * @var \MediaWiki\OAuthClient\Token
      */
     protected $token;
-
-    /**
-     * AbstractBaseApi constructor.
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Creates the Usertoken to use
@@ -66,6 +59,28 @@ class ApiManager
         }
 
         return $this->token = new Token($tokenData['token'], $tokenData{'secret'});
+    }
+
+    /**
+     * Creates a Token with given Credentials
+     *
+     * @param string $accessToken
+     * @param string $accessSecret
+     */
+    public function setTokenFromCredentials(string $accessToken, string $accessSecret): void
+    {
+        $this->token = new Token($accessToken, $accessSecret);
+    }
+
+    /**
+     * Creates a Consumer with given Credentials
+     *
+     * @param string $consumerToken
+     * @param string $consumerSecret
+     */
+    public function setConsumerFromCredentials(string $consumerToken, string $consumerSecret): void
+    {
+        $this->consumer = new Consumer($consumerToken, $consumerSecret);
     }
 
     /**
@@ -108,8 +123,8 @@ class ApiManager
         }
 
         return [
-            'token' => Session::get($tokenKey),
-            'secret' => Session::get($secretKey),
+            'token' => Session::get((string) $tokenKey),
+            'secret' => Session::get((string) $secretKey),
         ];
     }
 
