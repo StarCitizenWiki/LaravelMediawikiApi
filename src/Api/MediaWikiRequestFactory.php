@@ -118,7 +118,8 @@ class MediaWikiRequestFactory
     private function makeMediawikiRequestObject(): Request
     {
         if ($this->apiRequest->needsAuthentication()) {
-            $manager = app(ApiManager::class);
+            $manager = app('mediawikiapi.manager');
+
             $mediaWikiRequest = Request::fromConsumerAndToken(
                 $manager->getConsumer(),
                 $manager->getToken(),
@@ -132,7 +133,7 @@ class MediaWikiRequestFactory
                 $manager->getToken()
             );
         } else {
-            $mediaWikiRequest = Request::fromRequest(
+            $mediaWikiRequest = new Request(
                 $this->apiRequest->requestMethod(),
                 config(self::MEDIAWIKI_API_URL),
                 $this->apiRequest->queryParams()

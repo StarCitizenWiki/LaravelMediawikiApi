@@ -113,8 +113,8 @@ class MediaWikiResponse
             $errors = $this->body['error'];
         }
 
-        if (isset($this->headers[self::MEDIA_WIKI_API_ERROR])) {
-            $errors = array_merge($errors, $this->headers[self::MEDIA_WIKI_API_ERROR]);
+        if (empty($errors) && isset($this->headers[self::MEDIA_WIKI_API_ERROR])) {
+            $errors = $this->headers[self::MEDIA_WIKI_API_ERROR];
         }
 
         return $errors;

@@ -9,6 +9,7 @@ namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use InvalidArgumentException;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Edit;
+use StarCitizenWiki\MediaWikiApi\Api\Request\Parse;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Query;
 
 /**
@@ -32,6 +33,11 @@ class MediaWikiApi
             case 'query':
             case Query::class:
                 $action = app(Query::class);
+                break;
+
+            case 'parse':
+            case Parse::class:
+                $action = app(Parse::class);
                 break;
 
             default:
@@ -68,5 +74,15 @@ class MediaWikiApi
     public function query(): Query
     {
         return $this->make(Query::class);
+    }
+
+    /**
+     * Make a Parse Request
+     *
+     * @return \StarCitizenWiki\MediaWikiApi\Api\Request\Parse
+     */
+    public function parse(): Parse
+    {
+        return $this->make(Parse::class);
     }
 }
