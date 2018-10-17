@@ -174,7 +174,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      */
     public function request(): MediaWikiResponse
     {
-        $manager = app(ApiManager::class);
+        $manager = app('mediawikiapi.manager');
         if ($manager->csrfToken === null) {
             $response = app(MediaWikiApi::class)->query()->withTimestamp()->meta('tokens')->request();
 
