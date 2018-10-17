@@ -22,12 +22,17 @@ class ApiManager
     /**
      * @var \MediaWiki\OAuthClient\Consumer
      */
-    public $consumer;
+    private $consumer;
 
     /**
      * @var \MediaWiki\OAuthClient\Token
      */
-    public $token;
+    private $token;
+
+    /**
+     * @var string
+     */
+    public $csrfToken;
 
     /**
      * Creates the Usertoken to use

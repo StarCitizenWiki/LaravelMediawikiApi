@@ -2,6 +2,7 @@
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
+use StarCitizenWiki\MediaWikiApi\Api\ApiManager;
 use StarCitizenWiki\MediaWikiApi\Api\MediaWikiApi;
 use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
@@ -173,16 +174,22 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      */
     public function request(): MediaWikiResponse
     {
-        $response = app(MediaWikiApi::class)->query()->withTimestamp()->meta('tokens')->request();
+        $manager = app(ApiManager::class);
+        if ($manager->csrfToken === null) {
+            $response = app(MediaWikiApi::class)->query()->withTimestamp()->meta('tokens')->request();
 
-        if (!$response->successful()) {
-            throw new ApiErrorException($response);
+            if (!$response->successful()) {
+                throw new ApiErrorException($response);
+            }
+
+            $body = $response->getBody();
+
+            $this->params['starttimestamp'] = $body['curtimestamp'];
+            $this->params['token'] = $body['query']['tokens']['csrftoken'];
+            $manager->csrfToken = $body['query']['tokens']['csrftoken'];
+        } else {
+            $this->params['token'] = $manager->token;
         }
-
-        $body = $response->getBody();
-
-        $this->params['starttimestamp'] = $body['curtimestamp'];
-        $this->params['token'] = $body['query']['tokens']['csrftoken'];
 
         return parent::request();
     }
