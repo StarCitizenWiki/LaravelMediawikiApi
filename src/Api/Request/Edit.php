@@ -2,8 +2,6 @@
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
-use StarCitizenWiki\MediaWikiApi\Api\ApiManager;
-use StarCitizenWiki\MediaWikiApi\Api\MediaWikiApi;
 use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
 use StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException;
@@ -15,6 +13,8 @@ use StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException;
  */
 class Edit extends AbstractBaseRequest implements ApiRequestContract
 {
+    private $csrfToken;
+
     /**
      * Edit constructor.
      */
@@ -168,28 +168,31 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
     }
 
     /**
+     * Set the CSRF Token
+     *
+     * @param string $token
+     *
+     * @return $this
+     */
+    public function csrfToken(string $token)
+    {
+        $this->csrfToken = $token;
+
+        return $this;
+    }
+
+    /**
      * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
      *
      * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
      */
     public function request(): MediaWikiResponse
     {
-        $manager = app('mediawikiapi.manager');
-        if ($manager->csrfToken === null) {
-            $response = app(MediaWikiApi::class)->query()->withTimestamp()->meta('tokens')->request();
-
-            if (!$response->successful()) {
-                throw new ApiErrorException($response);
-            }
-
-            $body = $response->getBody();
-
-            $this->params['starttimestamp'] = $body['curtimestamp'];
-            $this->params['token'] = $body['query']['tokens']['csrftoken'];
-            $manager->csrfToken = $body['query']['tokens']['csrftoken'];
-        } else {
-            $this->params['token'] = $manager->token;
+        if (null === $this->csrfToken) {
+            throw new ApiErrorException('Missing CSRF Token');
         }
+
+        $this->params['token'] = $this->csrfToken;
 
         return parent::request();
     }

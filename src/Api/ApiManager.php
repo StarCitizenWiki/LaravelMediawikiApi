@@ -30,11 +30,6 @@ class ApiManager
     private $token;
 
     /**
-     * @var string
-     */
-    public $csrfToken;
-
-    /**
      * Creates the Usertoken to use
      *
      * @param \Illuminate\Contracts\Auth\Authenticatable|null $user Optional User Object to use
