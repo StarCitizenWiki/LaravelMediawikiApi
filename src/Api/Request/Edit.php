@@ -168,6 +168,20 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
     }
 
     /**
+     * Mark Edit as Bot
+     *
+     * @param bool $flag
+     *
+     * @return $this
+     */
+    public function markBotEdit(bool $flag = true)
+    {
+        $this->params['bot'] = $flag;
+
+        return $this;
+    }
+
+    /**
      * Set the CSRF Token
      *
      * @param string $token
