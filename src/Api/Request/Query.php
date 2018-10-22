@@ -64,6 +64,30 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
     }
 
     /**
+     * Set the Category Limit
+     *
+     * @param int $limit
+     *
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function cllimit(int $limit)
+    {
+        if (-1 === $limit || $limit > 5000) {
+            $limit = 'max';
+        } elseif ($limit < 0) {
+            throw new \InvalidArgumentException('Limit has to be greater than 0');
+        }
+
+        if (isset($this->params['prop']) && str_contains($this->params['prop'], 'categories')) {
+            $this->params['cllimit'] = $limit;
+        }
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function requestMethod(): string
