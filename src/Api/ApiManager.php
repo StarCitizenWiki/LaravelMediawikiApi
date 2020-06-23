@@ -58,7 +58,7 @@ class ApiManager
             throw new InvalidArgumentException("Invalid driver '{$driver}'");
         }
 
-        return $this->token = new Token($tokenData['token'], $tokenData{'secret'});
+        return $this->token = new Token($tokenData['token'], $tokenData['secret']);
     }
 
     /**
