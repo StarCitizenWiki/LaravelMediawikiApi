@@ -25,7 +25,7 @@ abstract class AbstractBaseRequest
     }
 
     /**
-     * Set format zo json
+     * Set format to json
      *
      * @return $this
      */
