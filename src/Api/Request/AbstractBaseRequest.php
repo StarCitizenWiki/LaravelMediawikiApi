@@ -1,9 +1,4 @@
-<?php declare(strict_types = 1);
-/**
- * User: Hannes
- * Date: 06.10.2018
- * Time: 20:18
- */
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
@@ -20,7 +15,9 @@ abstract class AbstractBaseRequest
     ];
 
     /**
-     * {@inheritdoc}
+     * The query params for this request
+     *
+     * @return array
      */
     public function queryParams(): array
     {
@@ -32,7 +29,7 @@ abstract class AbstractBaseRequest
      *
      * @return $this
      */
-    public function json()
+    public function json(): self
     {
         $this->params['format'] = 'json';
 
@@ -44,7 +41,7 @@ abstract class AbstractBaseRequest
      *
      * @return $this
      */
-    public function withTimestamp()
+    public function withTimestamp(): self
     {
         $this->params['curtimestamp'] = 1;
 
@@ -52,14 +49,16 @@ abstract class AbstractBaseRequest
     }
 
     /**
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
+     * @param array|null $requestConfig
+     *
+     * @return MediaWikiResponse
      */
-    public function request(): MediaWikiResponse
+    public function request(array $requestConfig = []): MediaWikiResponse
     {
-        /** @var \StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory $factory */
+        /** @var MediaWikiRequestFactory $factory */
         $factory = app()->makeWith(MediaWikiRequestFactory::class, ['apiRequest' => $this]);
 
-        return $factory->getResponse();
+        return $factory->getResponse($requestConfig);
     }
 
     /**
@@ -68,7 +67,7 @@ abstract class AbstractBaseRequest
      * @param string $key
      * @param string $value
      */
-    protected function setParam(string $key, string $value)
+    protected function setParam(string $key, string $value): void
     {
         if (isset($this->params[$key])) {
             $this->params[$key] .= "|{$value}";
