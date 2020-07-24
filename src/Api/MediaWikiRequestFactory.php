@@ -1,9 +1,4 @@
-<?php declare(strict_types = 1);
-/**
- * User: Hannes
- * Date: 06.10.2018
- * Time: 17:38
- */
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
@@ -24,14 +19,19 @@ class MediaWikiRequestFactory
     private const MEDIAWIKI_API_URL = 'mediawiki.api_url';
 
     /**
-     * @var \StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract
+     * @var ApiRequestContract
      */
     private $apiRequest;
 
     /**
+     * @var Client The guzzle client
+     */
+    private $client;
+
+    /**
      * MediaWikiRequestFactory constructor.
      *
-     * @param \StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract $apiRequest
+     * @param ApiRequestContract $apiRequest
      */
     public function __construct(ApiRequestContract $apiRequest)
     {
@@ -39,14 +39,20 @@ class MediaWikiRequestFactory
     }
 
     /**
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
+     * Makes a request with the given ApiRequestContract and returns a MediaWikiResponse from Guzzle
+     *
+     * @param array $requestConfig Optional request config passed directly into the Guzzle client creation
+     *
+     * @return MediaWikiResponse
      */
-    public function getResponse(): MediaWikiResponse
+    public function getResponse(array $requestConfig = []): MediaWikiResponse
     {
-        $client = $this->makeClient();
+        if ($this->client === null) {
+            $this->makeClient($requestConfig);
+        }
 
         try {
-            $response = $client->request(
+            $response = $this->client->request(
                 $this->apiRequest->requestMethod(),
                 $this->makeRequestUrl(),
                 $this->getRequestOptions()
@@ -72,6 +78,99 @@ class MediaWikiRequestFactory
     }
 
     /**
+     * Get the current guzzle client
+     *
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * Set a guzzle client to be used for the request
+     *
+     * @param Client $client
+     */
+    public function setClient(Client $client): void
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @param array $requestConfig
+     *
+     * @return void
+     */
+    private function makeClient(array $requestConfig): void
+    {
+        $mediaWikiRequest = $this->makeRequestObject();
+
+        try {
+            $header = $mediaWikiRequest->toHeader();
+        } catch (Exception $e) {
+            $header = 'Authorization: OAuth';
+        }
+        $header = explode(':', $header);
+
+        $baseConfig = array_merge(
+            config('mediawiki.request.timeout'),
+            [
+                'http_errors' => false,
+                'headers' => [
+                    $header[0] => $header[1],
+                ],
+            ]
+        );
+
+        $this->client = new Client(array_merge_recursive($baseConfig, $requestConfig));
+    }
+
+    /**
+     * Creates the request object
+     *
+     * @return Request
+     */
+    private function makeRequestObject(): Request
+    {
+        if ($this->apiRequest->needsAuthentication()) {
+            return $this->makeSignedRequestObject();
+        }
+
+        return new Request(
+            $this->apiRequest->requestMethod(),
+            config(self::MEDIAWIKI_API_URL),
+            $this->apiRequest->queryParams()
+        );
+    }
+
+    /**
+     * Creates a signed request object
+     *
+     * @return Request
+     */
+    private function makeSignedRequestObject(): Request
+    {
+        $manager = app('mediawikiapi.manager');
+
+        $mediaWikiRequest = Request::fromConsumerAndToken(
+            $manager->getConsumer(),
+            $manager->getToken(),
+            $this->apiRequest->requestMethod(),
+            config(self::MEDIAWIKI_API_URL),
+            $this->apiRequest->queryParams()
+        );
+
+        $mediaWikiRequest->signRequest(
+            new HmacSha1(),
+            $manager->getConsumer(),
+            $manager->getToken()
+        );
+
+        return $mediaWikiRequest;
+    }
+
+    /**
      * Create the Request URL
      *
      * @return string
@@ -85,62 +184,6 @@ class MediaWikiRequestFactory
         }
 
         return (string) $url;
-    }
-
-    /**
-     * @return \GuzzleHttp\Client
-     */
-    private function makeClient(): Client
-    {
-        $mediaWikiRequest = $this->makeMediawikiRequestObject();
-
-        try {
-            $header = $mediaWikiRequest->toHeader();
-        } catch (Exception $e) {
-            $header = 'Authorization: OAuth';
-        }
-        $header = explode(':', $header);
-
-        return new Client(
-            [
-                'timeout' => 1.0,
-                'http_errors' => false,
-                'headers' => [
-                    $header[0] => $header[1],
-                ],
-            ]
-        );
-    }
-
-    /**
-     * @return \MediaWiki\OAuthClient\Request
-     */
-    private function makeMediawikiRequestObject(): Request
-    {
-        if ($this->apiRequest->needsAuthentication()) {
-            $manager = app('mediawikiapi.manager');
-
-            $mediaWikiRequest = Request::fromConsumerAndToken(
-                $manager->getConsumer(),
-                $manager->getToken(),
-                $this->apiRequest->requestMethod(),
-                config(self::MEDIAWIKI_API_URL),
-                $this->apiRequest->queryParams()
-            );
-            $mediaWikiRequest->signRequest(
-                new HmacSha1(),
-                $manager->getConsumer(),
-                $manager->getToken()
-            );
-        } else {
-            $mediaWikiRequest = new Request(
-                $this->apiRequest->requestMethod(),
-                config(self::MEDIAWIKI_API_URL),
-                $this->apiRequest->queryParams()
-            );
-        }
-
-        return $mediaWikiRequest;
     }
 
     /**
