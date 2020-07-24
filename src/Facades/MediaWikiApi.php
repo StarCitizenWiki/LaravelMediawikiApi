@@ -1,10 +1,4 @@
-<?php declare(strict_types = 1);
-/**
- * Created by PhpStorm.
- * User: Hanne
- * Date: 08.10.2018
- * Time: 12:43
- */
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Facades;
 

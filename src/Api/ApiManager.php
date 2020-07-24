@@ -1,9 +1,4 @@
-<?php declare(strict_types = 1);
-/**
- * User: Hannes
- * Date: 05.10.2018
- * Time: 17:36
- */
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
@@ -20,23 +15,23 @@ use MediaWiki\OAuthClient\Token;
 class ApiManager
 {
     /**
-     * @var \MediaWiki\OAuthClient\Consumer
+     * @var Consumer
      */
     private $consumer;
 
     /**
-     * @var \MediaWiki\OAuthClient\Token
+     * @var Token
      */
     private $token;
 
     /**
      * Creates the Usertoken to use
      *
-     * @param \Illuminate\Contracts\Auth\Authenticatable|null $user Optional User Object to use
+     * @param Authenticatable|null $user Optional User Object to use
      *
-     * @return \MediaWiki\OAuthClient\Token
+     * @return Token
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getToken(?Authenticatable $user = null): Token
     {
@@ -86,9 +81,9 @@ class ApiManager
     /**
      * Creates the Consumer Object
      *
-     * @return \MediaWiki\OAuthClient\Consumer
+     * @return Consumer
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getConsumer(): Consumer
     {
@@ -111,7 +106,7 @@ class ApiManager
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getTokenFromSession(): array
     {
@@ -131,11 +126,11 @@ class ApiManager
     /**
      * Retrieve Token Data from User Object
      *
-     * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+     * @param Authenticatable|null $user
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getTokenFromDatabase(?Authenticatable $user): array
     {
@@ -156,4 +151,3 @@ class ApiManager
         ];
     }
 }
-

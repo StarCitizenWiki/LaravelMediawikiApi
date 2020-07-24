@@ -1,12 +1,8 @@
-<?php declare(strict_types = 1);
-/**
- * User: Hannes
- * Date: 05.10.2018
- * Time: 18:29
- */
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
+use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Edit;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Parse;
@@ -18,9 +14,28 @@ use StarCitizenWiki\MediaWikiApi\Api\Request\Query;
 class MediaWikiApi
 {
     /**
+     * Make an Edit Request
+     *
+     * @param null|string $title
+     *
+     * @return Edit
+     */
+    public function edit(?string $title = null): Edit
+    {
+        /** @var Edit $editObject */
+        $editObject = $this->make(Edit::class);
+
+        if (null !== $title) {
+            $editObject->title($title);
+        }
+
+        return $editObject;
+    }
+
+    /**
      * @param string $type
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return Application|mixed
      */
     public function make(string $type)
     {
@@ -48,28 +63,9 @@ class MediaWikiApi
     }
 
     /**
-     * Make an Edit Request
-     *
-     * @param null|string $title
-     *
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Request\Edit
-     */
-    public function edit(?string $title = null): Edit
-    {
-        /** @var \StarCitizenWiki\MediaWikiApi\Api\Request\Edit $editObject */
-        $editObject = $this->make(Edit::class);
-
-        if (null !== $title) {
-            $editObject->title($title);
-        }
-
-        return $editObject;
-    }
-
-    /**
      * Make a Query Request
      *
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Request\Query
+     * @return Query
      */
     public function query(): Query
     {
@@ -79,7 +75,7 @@ class MediaWikiApi
     /**
      * Make a Parse Request
      *
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Request\Parse
+     * @return Parse
      */
     public function parse(): Parse
     {

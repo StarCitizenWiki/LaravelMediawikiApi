@@ -1,13 +1,12 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
+use InvalidArgumentException;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
 
 /**
- * User: Hannes
- * Date: 05.10.2018
- * Time: 18:31
+ * Make action=query requests
  */
 class Query extends AbstractBaseRequest implements ApiRequestContract
 {
@@ -15,6 +14,7 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
 
     /**
      * Query constructor.
+     *
      */
     public function __construct()
     {
@@ -28,7 +28,7 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function meta(string $meta)
+    public function meta(string $meta): self
     {
         $this->setParam('meta', $meta);
 
@@ -42,7 +42,7 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function prop(string $prop)
+    public function prop(string $prop): self
     {
         $this->setParam('prop', $prop);
 
@@ -56,7 +56,7 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function titles(string $titles)
+    public function titles(string $titles): self
     {
         $this->setParam('titles', $titles);
 
@@ -70,18 +70,20 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function cllimit(int $limit)
+    public function cllimit(int $limit): self
     {
+        $queryLimit = $limit;
+
         if (-1 === $limit || $limit > 5000) {
-            $limit = 'max';
+            $queryLimit = 'max';
         } elseif ($limit < 0) {
-            throw new \InvalidArgumentException('Limit has to be greater than 0');
+            throw new InvalidArgumentException('Limit has to be greater than 0');
         }
 
-        if (isset($this->params['prop']) && str_contains($this->params['prop'], 'categories')) {
-            $this->params['cllimit'] = $limit;
+        if (isset($this->params['prop']) && strpos($this->params['prop'], 'categories') !== false) {
+            $this->params['cllimit'] = $queryLimit;
         }
 
         return $this;
@@ -100,11 +102,7 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
      */
     public function needsAuthentication(): bool
     {
-        if ($this->auth || isset($this->params['meta']) && str_contains($this->params['meta'], 'tokens')) {
-            return true;
-        }
-
-        return false;
+        return $this->auth || (isset($this->params['meta']) && strpos($this->params['meta'], 'tokens') !== false);
     }
 
     /**
@@ -112,7 +110,7 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function withAuthentication()
+    public function withAuthentication(): self
     {
         $this->auth = true;
 

@@ -1,18 +1,19 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
+use RuntimeException;
 use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
-use StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException;
 
 /**
- * User: Hannes
- * Date: 05.10.2018
- * Time: 18:30
+ * Make action=edit requests
  */
 class Edit extends AbstractBaseRequest implements ApiRequestContract
 {
+    /**
+     * @var string The csrf token for the edit request
+     */
     private $csrfToken;
 
     /**
@@ -46,7 +47,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function title(string $title)
+    public function title(string $title): self
     {
         unset($this->params['pageid']);
         $this->params['title'] = $title;
@@ -61,7 +62,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function pageId(int $id)
+    public function pageId(int $id): self
     {
         unset($this->params['title']);
         $this->params['pageid'] = $id;
@@ -76,7 +77,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function text(string $text)
+    public function text(string $text): self
     {
         $this->params['text'] = $text;
         $this->params['md5'] = md5($this->params['text']);
@@ -91,7 +92,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function section(?int $id = null)
+    public function section(?int $id = null): self
     {
         $this->params['section'] = $id;
         if (null === $id) {
@@ -108,7 +109,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function sectionTitle(string $title)
+    public function sectionTitle(string $title): self
     {
         $this->params['sectiontitle'] = $title;
 
@@ -122,7 +123,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function summary(string $summary)
+    public function summary(string $summary): self
     {
         $this->params['summary'] = $summary;
 
@@ -134,7 +135,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function createOnly()
+    public function createOnly(): self
     {
         $this->params['createonly'] = true;
 
@@ -146,7 +147,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function minor()
+    public function minor(): self
     {
         unset($this->params['notminor']);
         $this->params['minor'] = true;
@@ -159,7 +160,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function notMinor()
+    public function notMinor(): self
     {
         unset($this->params['minor']);
         $this->params['notminor'] = true;
@@ -174,7 +175,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function markBotEdit(bool $flag = true)
+    public function markBotEdit(bool $flag = true): self
     {
         $this->params['bot'] = $flag;
 
@@ -188,7 +189,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function csrfToken(string $token)
+    public function csrfToken(string $token): self
     {
         $this->csrfToken = $token;
 
@@ -196,18 +197,20 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
     }
 
     /**
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
+     * @param array $requestConfig
      *
-     * @throws \StarCitizenWiki\MediaWikiApi\Exceptions\ApiErrorException
+     * @return MediaWikiResponse
+     *
+     * @throws RuntimeException If the csrf token is null
      */
-    public function request(): MediaWikiResponse
+    public function request(array $requestConfig = []): MediaWikiResponse
     {
         if (null === $this->csrfToken) {
-            throw new ApiErrorException('Missing CSRF Token');
+            throw new RuntimeException('Missing CSRF Token');
         }
 
         $this->params['token'] = $this->csrfToken;
 
-        return parent::request();
+        return parent::request($requestConfig);
     }
 }

@@ -1,13 +1,11 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
 
 /**
- * User: Hannes
- * Date: 05.10.2018
- * Time: 18:31
+ * Make action=parse requests
  */
 class Parse extends AbstractBaseRequest implements ApiRequestContract
 {
@@ -26,7 +24,7 @@ class Parse extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function page(string $page)
+    public function page(string $page): self
     {
         $this->params['page'] = $page;
 
@@ -40,7 +38,7 @@ class Parse extends AbstractBaseRequest implements ApiRequestContract
      *
      * @return $this
      */
-    public function prop(string $prop)
+    public function prop(string $prop): self
     {
         $this->setParam('prop', $prop);
 

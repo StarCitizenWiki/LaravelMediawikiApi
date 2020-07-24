@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 return [
     'api_url' => env('WIKI_API_URL'),
@@ -16,5 +16,9 @@ return [
             'token' => 'oauth_token',
             'secret' => 'oauth_secret',
         ],
+    ],
+
+    'request' => [
+        'timeout' => 1.0,
     ],
 ];

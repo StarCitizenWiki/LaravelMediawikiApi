@@ -1,9 +1,4 @@
-<?php declare(strict_types = 1);
-/**
- * User: Hannes
- * Date: 06.10.2018
- * Time: 17:02
- */
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Contracts;
 
@@ -38,7 +33,9 @@ interface ApiRequestContract
     /**
      * Send the Request
      *
-     * @return \StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse
+     * @param array $requestConfig Optional Guzzle client config
+     *
+     * @return MediaWikiResponse
      */
-    public function request(): MediaWikiResponse;
+    public function request(array $requestConfig = []): MediaWikiResponse;
 }

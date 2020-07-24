@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi;
 
@@ -31,7 +31,7 @@ class ApiServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind('mediawikiapi', MediaWikiApi::class);
         $this->app->singleton('mediawikiapi.manager', ApiManager::class);
@@ -40,7 +40,7 @@ class ApiServiceProvider extends ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'mediawikiapi',
