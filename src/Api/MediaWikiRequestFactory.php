@@ -113,17 +113,15 @@ class MediaWikiRequestFactory
         }
         $header = explode(':', $header);
 
-        $baseConfig = array_merge(
-            config('mediawiki.request.timeout'),
-            [
-                'http_errors' => false,
-                'headers' => [
-                    $header[0] => $header[1],
-                ],
-            ]
-        );
+        $baseConfig = [
+            'timeout' => config('mediawiki.request.timeout', 1.0),
+            'http_errors' => false,
+            'headers' => [
+                $header[0] => $header[1],
+            ],
+        ];
 
-        $this->client = new Client(array_merge_recursive($baseConfig, $requestConfig));
+        $this->client = new Client(array_replace_recursive($baseConfig, $requestConfig));
     }
 
     /**
