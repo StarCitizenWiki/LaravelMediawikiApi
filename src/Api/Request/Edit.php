@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
@@ -14,7 +16,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
     /**
      * @var string The csrf token for the edit request
      */
-    private $csrfToken;
+    private string $csrfToken;
 
     /**
      * Edit constructor.

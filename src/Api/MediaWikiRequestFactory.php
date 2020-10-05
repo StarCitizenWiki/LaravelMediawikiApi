@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use MediaWiki\OAuthClient\Exception;
 use MediaWiki\OAuthClient\Request;
@@ -21,12 +24,12 @@ class MediaWikiRequestFactory
     /**
      * @var ApiRequestContract
      */
-    private $apiRequest;
+    private ApiRequestContract $apiRequest;
 
     /**
      * @var Client The guzzle client
      */
-    private $client;
+    private Client $client;
 
     /**
      * MediaWikiRequestFactory constructor.
@@ -60,12 +63,12 @@ class MediaWikiRequestFactory
         } catch (RequestException $e) {
             if (!$e->hasResponse()) {
                 $response = new Response(
-                    503,
+                    $e->getCode(),
                     [],
                     sprintf(
                         "Request URI: %s\nRequest Body: %s\nRequest Method: %s",
                         $e->getRequest()->getUri(),
-                        (string) $e->getRequest()->getBody() ?: 'empty',
+                        (string)$e->getRequest()->getBody() ?: 'empty',
                         $e->getRequest()->getMethod()
                     )
                 );
@@ -181,7 +184,7 @@ class MediaWikiRequestFactory
             $url = sprintf('%s?%s', $url, http_build_query($this->apiRequest->queryParams()));
         }
 
-        return (string) $url;
+        return (string)$url;
     }
 
     /**

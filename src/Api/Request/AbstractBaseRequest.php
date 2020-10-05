@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
+use GuzzleHttp\Exception\GuzzleException;
 use StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory;
 use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 
@@ -10,7 +13,7 @@ use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
  */
 abstract class AbstractBaseRequest
 {
-    protected $params = [
+    protected array $params = [
         'format' => 'json',
     ];
 
@@ -52,6 +55,8 @@ abstract class AbstractBaseRequest
      * @param array|null $requestConfig
      *
      * @return MediaWikiResponse
+     *
+     * @throws GuzzleException
      */
     public function request(array $requestConfig = []): MediaWikiResponse
     {

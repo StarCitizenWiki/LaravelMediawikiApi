@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi;
 
@@ -19,7 +21,7 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $source = realpath($raw = __DIR__.'/../config/mediawiki.php') ?: $raw;
+        $source = realpath($raw = __DIR__ . '/../config/mediawiki.php') ?: $raw;
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('mediawiki.php')]);

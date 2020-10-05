@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api;
 
@@ -17,12 +19,12 @@ class ApiManager
     /**
      * @var Consumer
      */
-    private $consumer;
+    private Consumer $consumer;
 
     /**
      * @var Token
      */
-    private $token;
+    private Token $token;
 
     /**
      * Creates the Usertoken to use
@@ -118,8 +120,8 @@ class ApiManager
         }
 
         return [
-            'token' => Session::get((string) $tokenKey),
-            'secret' => Session::get((string) $secretKey),
+            'token' => Session::get((string)$tokenKey),
+            'secret' => Session::get((string)$secretKey),
         ];
     }
 

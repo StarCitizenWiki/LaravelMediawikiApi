@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Exceptions;
 
@@ -11,14 +13,14 @@ use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 class ApiErrorException extends Exception
 {
     /**
-     * @var MediaWikiResponse
+     * @var MediaWikiResponse|null
      */
-    private $response;
+    private ?MediaWikiResponse $response;
 
     /**
      * ApiErrorException constructor.
      *
-     * @param MediaWikiResponse $response
+     * @param MediaWikiResponse|null $response
      */
     public function __construct(MediaWikiResponse $response = null)
     {
