@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Response;
 
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+
 use function GuzzleHttp\json_decode;
 
 /**
@@ -15,31 +18,31 @@ class MediaWikiResponse
     private const MEDIA_WIKI_API_ERROR = 'MediaWiki-API-Error';
 
     /**
-     * @var Response
+     * @var Response|null
      */
-    private $rawResponse;
+    private ?Response $rawResponse;
 
     /**
      * @var string Raw Response Body
      */
-    private $rawBody;
+    private string $rawBody;
 
     /**
      * Parsed Body
      *
      * @var array
      */
-    private $body;
+    private array $body;
 
     /**
      * @var int HTTP Status Code
      */
-    private $status;
+    private int $status;
 
     /**
      * @var array Response Headers
      */
-    private $headers;
+    private array $headers;
 
     /**
      * MediaWikiResponse constructor.
@@ -69,7 +72,7 @@ class MediaWikiResponse
      */
     public static function fromGuzzleResponse(Response $response): MediaWikiResponse
     {
-        return new self((string) $response->getBody(), $response->getStatusCode(), $response->getHeaders(), $response);
+        return new self((string)$response->getBody(), $response->getStatusCode(), $response->getHeaders(), $response);
     }
 
     /**
@@ -89,7 +92,9 @@ class MediaWikiResponse
      */
     public function hasErrors(): bool
     {
-        return isset($this->body['error']) || ($this->rawResponse !== null && $this->rawResponse->hasHeader(self::MEDIA_WIKI_API_ERROR));
+        return isset($this->body['error']) || ($this->rawResponse !== null && $this->rawResponse->hasHeader(
+            self::MEDIA_WIKI_API_ERROR
+        ));
     }
 
     /**
@@ -117,6 +122,10 @@ class MediaWikiResponse
 
         if (empty($errors) && isset($this->headers[self::MEDIA_WIKI_API_ERROR])) {
             $errors = $this->headers[self::MEDIA_WIKI_API_ERROR];
+        }
+
+        if (!is_array($errors)) {
+            $errors = [$errors];
         }
 
         return $errors;
