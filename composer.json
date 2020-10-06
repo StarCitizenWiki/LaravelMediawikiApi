@@ -4,12 +4,12 @@
     "type": "library",
     "require": {
         "php": ">=7.2",
-        "../vendor/mediawiki/oauthclient": "^1.1.0",
-        "../vendor/guzzlehttp/guzzle": "^6.0||^7.0.1"
+        "mediawiki/oauthclient": "^1.1.0",
+        "guzzlehttp/guzzle": "^6.0||^7.0.1"
     },
     "require-dev": {
-        "../vendor/phpunit/phpunit": "^9.2.6",
-        "../vendor/mockery/mockery": "~1.0"
+        "phpunit/phpunit": "^9.2.6",
+        "mockery/mockery": "~1.0"
     },
     "authors": [
         {
