@@ -2,6 +2,7 @@
     "name": "starcitizenwiki/mediawikiapi",
     "description": "Laravel Package to interact with a Mediawiki Installation through the API, authenticated via OAuth",
     "type": "library",
+    "version": "0.0.0-dev",
     "require": {
         "php": ">=7.4",
         "mediawiki/oauthclient": "^1.1.0",
