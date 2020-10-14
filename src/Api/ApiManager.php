@@ -22,9 +22,9 @@ class ApiManager
     private Consumer $consumer;
 
     /**
-     * @var Token
+     * @var Token|null
      */
-    private Token $token;
+    private ?Token $token = null;
 
     /**
      * Creates the Usertoken to use

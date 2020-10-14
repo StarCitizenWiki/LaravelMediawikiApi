@@ -27,9 +27,9 @@ class MediaWikiRequestFactory
     private ApiRequestContract $apiRequest;
 
     /**
-     * @var Client The guzzle client
+     * @var Client|null The guzzle client
      */
-    private Client $client;
+    private ?Client $client = null;
 
     /**
      * MediaWikiRequestFactory constructor.
@@ -184,7 +184,7 @@ class MediaWikiRequestFactory
             $url = sprintf('%s?%s', $url, http_build_query($this->apiRequest->queryParams()));
         }
 
-        return (string)$url;
+        return $url;
     }
 
     /**

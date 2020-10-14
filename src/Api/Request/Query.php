@@ -12,7 +12,7 @@ use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
  */
 class Query extends AbstractBaseRequest implements ApiRequestContract
 {
-    private $auth = false;
+    private bool $auth = false;
 
     /**
      * Query constructor.
