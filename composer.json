@@ -3,7 +3,7 @@
     "description": "Laravel Package to interact with a Mediawiki Installation through the API, authenticated via OAuth",
     "type": "library",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "mediawiki/oauthclient": "^1.1.0",
         "guzzlehttp/guzzle": "^6.0||^7.0.1"
     },
