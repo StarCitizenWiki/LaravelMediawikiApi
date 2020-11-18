@@ -6,6 +6,7 @@ namespace StarCitizenWiki\MediaWikiApi\Api;
 
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
+use StarCitizenWiki\MediaWikiApi\Api\Request\Action;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Edit;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Parse;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Query;
@@ -36,10 +37,11 @@ class MediaWikiApi
 
     /**
      * @param string $type
+     * @param array  $params Optional constructor arguments where applicable
      *
      * @return Application|mixed
      */
-    public function make(string $type)
+    public function make(string $type, array $params = [])
     {
         switch ($type) {
             case 'edit':
@@ -55,6 +57,11 @@ class MediaWikiApi
             case 'parse':
             case Parse::class:
                 $action = app(Parse::class);
+                break;
+
+            case 'action':
+            case Action::class:
+                $action = app()->makeWith(Action::class, $params);
                 break;
 
             default:
@@ -82,5 +89,23 @@ class MediaWikiApi
     public function parse(): Parse
     {
         return $this->make(Parse::class);
+    }
+
+    /**
+     * Makes a Action Request
+     *
+     * @param string $action    The API action
+     * @param string $method    The request method required by the action GET or POST
+     * @param bool   $needsAuth True if the action requires authentication
+     *
+     * @return Action
+     */
+    public function action(string $action, string $method = 'GET', bool $needsAuth = false): Action
+    {
+        return app()->makeWith(Action::class, [
+            'action' => $action,
+            'method' => $method,
+            'needsAuth' => $needsAuth,
+        ]);
     }
 }
