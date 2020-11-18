@@ -45,6 +45,25 @@ abstract class AbstractBaseRequest
     }
 
     /**
+     * Set formatversion
+     * Valid versions are '1', '2', 'latest'
+     *
+     * @param string|int $version
+     *
+     * @return $this
+     */
+    public function formatVersion($version): self
+    {
+        $validFormats = ['1', '2', 'latest'];
+
+        if (in_array((string)$version, $validFormats)) {
+            $this->params['formatversion'] = (string)$version;
+        }
+
+        return $this;
+    }
+
+    /**
      * Include current Timestamp
      *
      * @return $this

@@ -88,6 +88,61 @@ class ActionTest extends TestCase
     }
 
     /**
+     * Test setting the formatversion to 1
+     *
+     * @covers \StarCitizenWiki\MediaWikiApi\Api\Request\Action::formatVersion()
+     */
+    public function testFormatversion1(): void
+    {
+        $action = new Action('foo');
+        $action->formatVersion(1);
+
+        self::assertArrayHasKey('formatversion', $action->queryParams());
+        self::assertEquals('formatversion', $action->queryParams()['1']);
+    }
+
+    /**
+     * Test setting the formatversion to 2
+     *
+     * @covers \StarCitizenWiki\MediaWikiApi\Api\Request\Action::formatVersion()
+     */
+    public function testFormatversion2(): void
+    {
+        $action = new Action('foo');
+        $action->formatVersion(2);
+
+        self::assertArrayHasKey('formatversion', $action->queryParams());
+        self::assertEquals('formatversion', $action->queryParams()['2']);
+    }
+
+    /**
+     * Test setting the formatversion to latest
+     *
+     * @covers \StarCitizenWiki\MediaWikiApi\Api\Request\Action::formatVersion()
+     */
+    public function testFormatversionLatest(): void
+    {
+        $action = new Action('foo');
+        $action->formatVersion('latest');
+
+        self::assertArrayHasKey('formatversion', $action->queryParams());
+        self::assertEquals('formatversion', $action->queryParams()['latest']);
+    }
+
+    /**
+     * Test setting the formatversion with an invalid value
+     *
+     * @covers \StarCitizenWiki\MediaWikiApi\Api\Request\Action::formatVersion()
+     */
+    public function testFormatversionInvalid(): void
+    {
+        $action = new Action('foo');
+        $action->formatVersion('invalid');
+
+        self::assertArrayNotHasKey('formatversion', $action->queryParams());
+    }
+
+    /**
      * Test addParam multiple
      *
      * @covers \StarCitizenWiki\MediaWikiApi\Api\Request\Action::addParam()
