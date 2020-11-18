@@ -13,6 +13,11 @@ use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
  */
 abstract class AbstractBaseRequest
 {
+    /**
+     * @var bool
+     */
+    protected bool $auth = false;
+
     protected array $params = [
         'format' => 'json',
     ];
@@ -49,6 +54,28 @@ abstract class AbstractBaseRequest
         $this->params['curtimestamp'] = 1;
 
         return $this;
+    }
+
+    /**
+     * Force Authentication
+     *
+     * @return $this
+     */
+    public function withAuthentication(): self
+    {
+        $this->auth = true;
+
+        return $this;
+    }
+
+    /**
+     * True if the action requires authentication
+     *
+     * @return bool
+     */
+    public function needsAuthentication(): bool
+    {
+        return $this->auth;
     }
 
     /**

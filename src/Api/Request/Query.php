@@ -12,8 +12,6 @@ use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
  */
 class Query extends AbstractBaseRequest implements ApiRequestContract
 {
-    private bool $auth = false;
-
     /**
      * Query constructor.
      *
@@ -105,17 +103,5 @@ class Query extends AbstractBaseRequest implements ApiRequestContract
     public function needsAuthentication(): bool
     {
         return $this->auth || (isset($this->params['meta']) && strpos($this->params['meta'], 'tokens') !== false);
-    }
-
-    /**
-     * Force Authentication
-     *
-     * @return $this
-     */
-    public function withAuthentication(): self
-    {
-        $this->auth = true;
-
-        return $this;
     }
 }
