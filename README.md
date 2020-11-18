@@ -136,3 +136,23 @@ $edit->markBotEdit();
 // Set the CSRF Token
 $edit->csrfToken('token');
 ```
+
+### Action
+A generic class for requesting arbitrary API actions
+
+```php
+// Creates an action object with ?action=action-name, request method to 'GET' and auth to false
+$action = MediaWikiApi::action('action-name');
+
+// Creates an action object with ?action=foo, request method to 'POST' and auth to true
+$actionPostAuth = MediaWikiApi::action('foo', 'POST', true);
+
+// Creates an action object with ?action=bar
+$actionBar = MediaWikiApi::action('bar');
+$actionBar->withAuthentication(); // auth is now true
+
+// Adding parameters
+$action->addParam('name', 'value'); // &name=value
+
+$action->addParam('delete', true); // &delete=true
+```
