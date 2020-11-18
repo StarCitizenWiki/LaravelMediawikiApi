@@ -16,7 +16,7 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
     /**
      * @var string The csrf token for the edit request
      */
-    private string $csrfToken;
+    private $csrfToken;
 
     /**
      * Edit constructor.

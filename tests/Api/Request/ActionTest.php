@@ -98,7 +98,7 @@ class ActionTest extends TestCase
         $action->formatVersion(1);
 
         self::assertArrayHasKey('formatversion', $action->queryParams());
-        self::assertEquals('formatversion', $action->queryParams()['1']);
+        self::assertEquals('1', $action->queryParams()['formatversion']);
     }
 
     /**
@@ -112,7 +112,7 @@ class ActionTest extends TestCase
         $action->formatVersion(2);
 
         self::assertArrayHasKey('formatversion', $action->queryParams());
-        self::assertEquals('formatversion', $action->queryParams()['2']);
+        self::assertEquals('2', $action->queryParams()['formatversion']);
     }
 
     /**
@@ -126,7 +126,7 @@ class ActionTest extends TestCase
         $action->formatVersion('latest');
 
         self::assertArrayHasKey('formatversion', $action->queryParams());
-        self::assertEquals('formatversion', $action->queryParams()['latest']);
+        self::assertEquals('latest', $action->queryParams()['formatversion']);
     }
 
     /**
