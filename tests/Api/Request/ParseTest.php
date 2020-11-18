@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace StarCitizenWiki\MediaWikiApi\Tests\Api\Request;
+
 use PHPUnit\Framework\TestCase;
 use StarCitizenWiki\MediaWikiApi\Api\Request\Parse;
 
