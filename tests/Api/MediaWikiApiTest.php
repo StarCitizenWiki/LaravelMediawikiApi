@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace StarCitizenWiki\MediaWikiApi\Tests\Api;
 
 use PHPUnit\Framework\TestCase;
+use StarCitizenWiki\MediaWikiApi\Api\MediaWikiApi;
 
 class MediaWikiApiTest extends TestCase
 {
@@ -15,7 +16,7 @@ class MediaWikiApiTest extends TestCase
     {
         $page = 'Example';
 
-        $api = new StarCitizenWiki\MediaWikiApi\Api\MediaWikiApi();
+        $api = new MediaWikiApi();
         $editObj = $api->edit($page);
 
         self::assertArrayHasKey('title', $editObj->queryParams());
