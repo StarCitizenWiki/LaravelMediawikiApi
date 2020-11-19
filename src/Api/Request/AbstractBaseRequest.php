@@ -147,7 +147,9 @@ abstract class AbstractBaseRequest
             throw new RuntimeException('Missing CSRF Token');
         }
 
-        $this->params['token'] = $this->csrfToken;
+        if (null !== $this->csrfToken) {
+            $this->params['token'] = $this->csrfToken;
+        }
 
         /** @var MediaWikiRequestFactory $factory */
         $factory = app()->makeWith(MediaWikiRequestFactory::class, ['apiRequest' => $this]);
