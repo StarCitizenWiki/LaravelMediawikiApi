@@ -33,6 +33,13 @@ interface ApiRequestContract
     public function needsAuthentication(): bool;
 
     /**
+     * If the Request needs an csrf token
+     *
+     * @return bool
+     */
+    public function needsCsrfToken(): bool;
+
+    /**
      * Send the Request
      *
      * @param array $requestConfig Optional Guzzle client config

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
-use RuntimeException;
-use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
 
 /**
@@ -13,11 +11,6 @@ use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
  */
 class Edit extends AbstractBaseRequest implements ApiRequestContract
 {
-    /**
-     * @var string The csrf token for the edit request
-     */
-    private $csrfToken;
-
     /**
      * Edit constructor.
      */
@@ -182,37 +175,5 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
         $this->params['bot'] = $flag;
 
         return $this;
-    }
-
-    /**
-     * Set the CSRF Token
-     *
-     * @param string $token
-     *
-     * @return $this
-     */
-    public function csrfToken(string $token): self
-    {
-        $this->csrfToken = $token;
-
-        return $this;
-    }
-
-    /**
-     * @param array $requestConfig
-     *
-     * @return MediaWikiResponse
-     *
-     * @throws RuntimeException If the csrf token is null
-     */
-    public function request(array $requestConfig = []): MediaWikiResponse
-    {
-        if (null === $this->csrfToken) {
-            throw new RuntimeException('Missing CSRF Token');
-        }
-
-        $this->params['token'] = $this->csrfToken;
-
-        return parent::request($requestConfig);
     }
 }

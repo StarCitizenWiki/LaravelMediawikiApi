@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace StarCitizenWiki\MediaWikiApi\Api\Request;
 
 use GuzzleHttp\Exception\GuzzleException;
+use RuntimeException;
 use StarCitizenWiki\MediaWikiApi\Api\MediaWikiRequestFactory;
 use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 
@@ -18,6 +19,16 @@ abstract class AbstractBaseRequest
      */
     protected bool $auth = false;
 
+    /**
+     * @var string|null The csrf token for the edit request
+     */
+    protected ?string $csrfToken;
+
+    /**
+     * The request params
+     *
+     * @var array|string[]
+     */
     protected array $params = [
         'format' => 'json',
     ];
@@ -64,6 +75,30 @@ abstract class AbstractBaseRequest
     }
 
     /**
+     * Set the CSRF Token
+     *
+     * @param string $token
+     *
+     * @return $this
+     */
+    public function csrfToken(string $token): self
+    {
+        $this->csrfToken = $token;
+
+        return $this;
+    }
+
+    /**
+     * If the Request needs an csrf token
+     *
+     * @return bool
+     */
+    public function needsCsrfToken(): bool
+    {
+        return $this->csrfToken !== null;
+    }
+
+    /**
      * Include current Timestamp
      *
      * @return $this
@@ -103,9 +138,17 @@ abstract class AbstractBaseRequest
      * @return MediaWikiResponse
      *
      * @throws GuzzleException
+     *
+     * @throws RuntimeException If the csrf token is null
      */
     public function request(array $requestConfig = []): MediaWikiResponse
     {
+        if (null === $this->csrfToken && $this->needsCsrfToken()) {
+            throw new RuntimeException('Missing CSRF Token');
+        }
+
+        $this->params['token'] = $this->csrfToken;
+
         /** @var MediaWikiRequestFactory $factory */
         $factory = app()->makeWith(MediaWikiRequestFactory::class, ['apiRequest' => $this]);
 
