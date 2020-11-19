@@ -38,19 +38,4 @@ class Action extends AbstractBaseRequest implements ApiRequestContract
     {
         return $this->requestMethod;
     }
-
-    /**
-     * Add a parameter to the request
-     *
-     * @param string $name Param name
-     * @param mixed $value Param value
-     *
-     * @return $this
-     */
-    public function addParam(string $name, $value): self
-    {
-        $this->setParam($name, (string)$value);
-
-        return $this;
-    }
 }

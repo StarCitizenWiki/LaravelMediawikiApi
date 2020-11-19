@@ -40,6 +40,7 @@ $request->json(); // Set the request format to 'json'
 $request->csrfToken('TOKEN'); // Set the csrf token for this request
 $request->formatVersion('latest'); // Set the formatversion. Valid values are 1, 2, 'latest'
 $request->withTimestamp(); // Set the 'curtimestamp' param to 1
+$request->addParam('key', 'value');
 $request->request(); // Send the request, returns a MediaWikiResponse
 $request->request([ 
   'timeout' => 10,
