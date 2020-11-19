@@ -49,7 +49,7 @@ class Action extends AbstractBaseRequest implements ApiRequestContract
      */
     public function addParam(string $name, $value): self
     {
-        $this->setParam($name, $value);
+        $this->setParam($name, (string)$value);
 
         return $this;
     }
