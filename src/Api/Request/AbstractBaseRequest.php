@@ -158,6 +158,21 @@ abstract class AbstractBaseRequest
     }
 
     /**
+     * Add a parameter to the request
+     *
+     * @param string $name Param name
+     * @param mixed $value Param value
+     *
+     * @return $this
+     */
+    public function addParam(string $name, $value): self
+    {
+        $this->setParam($name, (string)$value);
+
+        return $this;
+    }
+
+    /**
      * Set or append a Api Query Parameter
      *
      * @param string $key

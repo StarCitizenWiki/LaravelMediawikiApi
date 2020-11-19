@@ -1,6 +1,12 @@
 # Laravel MediaWiki API
 Laravel Package to interact with a Mediawiki Installation through the API, authenticated via OAuth.
 
+<p align="center">
+    <img src="https://img.shields.io/packagist/v/starcitizenwiki/mediawikiapi" alt="packagist version" />
+    <img src="https://img.shields.io/packagist/dt/starcitizenwiki/mediawikiapi" alt="packagist downloads />
+    <img src="https://img.shields.io/packagist/php-v/starcitizenwiki/mediawikiapi" alt="php min version" />
+</p>
+
 ## Installation
 Publish the configuration `php artisan vendor:publish`.  
 Select `StarCitizenWiki\MediaWikiApi\ApiServiceProvider`
@@ -34,6 +40,7 @@ $request->json(); // Set the request format to 'json'
 $request->csrfToken('TOKEN'); // Set the csrf token for this request
 $request->formatVersion('latest'); // Set the formatversion. Valid values are 1, 2, 'latest'
 $request->withTimestamp(); // Set the 'curtimestamp' param to 1
+$request->addParam('key', 'value');
 $request->request(); // Send the request, returns a MediaWikiResponse
 $request->request([ 
   'timeout' => 10,
