@@ -176,4 +176,12 @@ class Edit extends AbstractBaseRequest implements ApiRequestContract
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function needsCsrfToken(): bool
+    {
+        return true;
+    }
 }

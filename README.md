@@ -31,6 +31,7 @@ The base request class contains the following methods:
 ```php
 $request->queryParams(); // Returns the query params as an array
 $request->json(); // Set the request format to 'json'
+$request->csrfToken('TOKEN'); // Set the csrf token for this request
 $request->formatVersion('latest'); // Set the formatversion. Valid values are 1, 2, 'latest'
 $request->withTimestamp(); // Set the 'curtimestamp' param to 1
 $request->request(); // Send the request, returns a MediaWikiResponse
