@@ -17,9 +17,9 @@ use MediaWiki\OAuthClient\Token;
 class ApiManager
 {
     /**
-     * @var Consumer
+     * @var Consumer|null
      */
-    private Consumer $consumer;
+    private ?Consumer $consumer = null;
 
     /**
      * @var Token|null
