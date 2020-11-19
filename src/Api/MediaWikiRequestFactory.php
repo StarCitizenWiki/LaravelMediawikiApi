@@ -11,6 +11,7 @@ use GuzzleHttp\Psr7\Response;
 use MediaWiki\OAuthClient\Exception;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
+use RuntimeException;
 use StarCitizenWiki\MediaWikiApi\Api\Response\MediaWikiResponse;
 use StarCitizenWiki\MediaWikiApi\Contracts\ApiRequestContract;
 
@@ -47,6 +48,8 @@ class MediaWikiRequestFactory
      * @param array $requestConfig Optional request config passed directly into the Guzzle client creation
      *
      * @return MediaWikiResponse
+     *
+     * @throws RuntimeException
      */
     public function getResponse(array $requestConfig = []): MediaWikiResponse
     {
@@ -63,7 +66,7 @@ class MediaWikiRequestFactory
         } catch (RequestException $e) {
             if (!$e->hasResponse()) {
                 $response = new Response(
-                    $e->getCode(),
+                    $e->getCode() === 0 ? 400 : $e->getCode(),
                     [],
                     sprintf(
                         "Request URI: %s\nRequest Body: %s\nRequest Method: %s",
@@ -131,9 +134,15 @@ class MediaWikiRequestFactory
      * Creates the request object
      *
      * @return Request
+     *
+     * @throws RuntimeException
      */
     private function makeRequestObject(): Request
     {
+        if (config(self::MEDIAWIKI_API_URL, null) === null) {
+            throw new RuntimeException('MediaWiki Api Url is missing.');
+        }
+
         if ($this->apiRequest->needsAuthentication()) {
             return $this->makeSignedRequestObject();
         }
