@@ -22,7 +22,7 @@ abstract class AbstractBaseRequest
     /**
      * @var string|null The csrf token for the edit request
      */
-    protected ?string $csrfToken;
+    protected ?string $csrfToken = null;
 
     /**
      * The request params
