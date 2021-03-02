@@ -21,7 +21,7 @@ class MediaWikiApi
      *
      * @param null|string $title
      *
-     * @return Edit
+     * @return StarCitizenWiki\MediaWikiApi\Api\Request\Edit
      */
     public function edit(?string $title = null): Edit
     {
@@ -74,7 +74,7 @@ class MediaWikiApi
     /**
      * Make a Query Request
      *
-     * @return Query
+     * @return StarCitizenWiki\MediaWikiApi\Api\Request\Query
      */
     public function query(): Query
     {
@@ -84,7 +84,7 @@ class MediaWikiApi
     /**
      * Make a Parse Request
      *
-     * @return Parse
+     * @return StarCitizenWiki\MediaWikiApi\Api\Request\Parse
      */
     public function parse(): Parse
     {
@@ -98,7 +98,7 @@ class MediaWikiApi
      * @param string $method    The request method required by the action GET or POST
      * @param bool   $needsAuth True if the action requires authentication
      *
-     * @return Action
+     * @return StarCitizenWiki\MediaWikiApi\Api\Request\Action
      */
     public function action(string $action, string $method = 'GET', bool $needsAuth = false): Action
     {
