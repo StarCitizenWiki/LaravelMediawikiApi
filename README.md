@@ -1,11 +1,13 @@
 # Laravel MediaWiki API
-Laravel Package to interact with a Mediawiki Installation through the API, authenticated via OAuth.
-
 <p align="center">
     <img src="https://img.shields.io/packagist/v/starcitizenwiki/mediawikiapi" alt="packagist version" />
     <img src="https://img.shields.io/packagist/dt/starcitizenwiki/mediawikiapi" alt="packagist downloads />
     <img src="https://img.shields.io/packagist/php-v/starcitizenwiki/mediawikiapi" alt="php min version" />
 </p>
+                                                                                                        
+Laravel Package to interact with a Mediawiki Installation through the API, authenticated via OAuth.
+
+`composer require starcitizenwiki/mediawikiapi`
 
 ## Installation
 Publish the configuration `php artisan vendor:publish`.  
