@@ -36,10 +36,14 @@ abstract class AbstractBaseRequest
     /**
      * @param $name
      * @param $arguments
+     *
+     * @return $this
      */
-    public function __call(string $name, $arguments)
+    public function __call(string $name, $arguments): self
     {
-        $this->setParam($name, (string)$arguments);
+        $this->setParam($name, (string)($arguments[0] ?? ''));
+
+        return $this;
     }
 
     /**
