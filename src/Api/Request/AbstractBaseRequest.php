@@ -34,6 +34,15 @@ abstract class AbstractBaseRequest
     ];
 
     /**
+     * @param $name
+     * @param $arguments
+     */
+    public function __call(string $name, $arguments)
+    {
+        $this->setParam($name, (string)$arguments);
+    }
+
+    /**
      * The query params for this request
      *
      * @return array
