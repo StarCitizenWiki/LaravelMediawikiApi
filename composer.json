@@ -5,7 +5,7 @@
     "version": "1.0.3",
     "require": {
         "php": ">=7.4",
-        "mediawiki/oauthclient": "^1.1.0||^2.0",
+        "mediawiki/oauthclient": "^1.1.0||^2.0||dev-master",
         "guzzlehttp/guzzle": "^6.0||^7.0.1"
     },
     "require-dev": {
