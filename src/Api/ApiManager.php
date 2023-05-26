@@ -59,6 +59,24 @@ class ApiManager
     }
 
     /**
+     * Sets the token to use
+     *
+     * @param Token $token
+     */
+    public function setToken(Token $token): void
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * Calls getToken() and sets the token
+     */
+    public function setTokenFromBackend(): void
+    {
+        $this->setToken($this->getToken());
+    }
+
+    /**
      * Creates a Token with given Credentials
      *
      * @param string $accessToken
